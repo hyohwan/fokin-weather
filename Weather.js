@@ -1,60 +1,60 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+const weatherOptions = {
+  // Haze
+  Clear: {
+    iconName: 'weather-sunny',
+    gradient: ['#B2FEFA', '#0ED2F7'],
+  },
+  Clouds: {
+    iconName: 'weather-cloudy',
+    gradient: ['#757F9A', '#D7DDE8'],
+  },
+  unknown: {
+    iconName: 'help-circle-outline',
+    gradient: ['#DE6262', '#FFB88C'],
+  },
+};
+
 export default function Weather({ temp, condition }) {
-  console.log('');
+  console.log(temp, condition);
   return (
-    <View style={styles.container}>
-      <LinearGradient
-          colors={['rgba(255,60,0,0.8)', 'transparent']}
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            height: 300,
-          }}
-      />
+    <LinearGradient colors={(weatherOptions[condition] || weatherOptions['unknown']).gradient} style={styles.container}>
+      <StatusBar barStyle={'light-content'} />
       <View style={styles.halfContainer}>
-        <MaterialCommunityIcons name="weather-lightning-rainy" size={96} color="black" />
-        <Text style={styles.temp}>{temp}</Text>
+        <MaterialCommunityIcons name={(weatherOptions[condition] || weatherOptions['unknown']).iconName} size={96} color='white' />
+        <Text style={styles.temp}>{temp}º</Text>
       </View>
       <View style={styles.halfContainer}>
         <Text>123</Text>
       </View>
-    </View>
-  )
+    </LinearGradient>
+  );
 }
 
 Weather.propTypes = {
   temp: PropTypes.number.isRequired,
-  condition: PropTypes.oneOf([
-    'Thunderstorm', 
-    'Drizzle', 
-    'Rain', 
-    'Snow', 
-    'Atmosphere', 
-    'Clear', 
-    'Clouds'
-  ]).isRequired,
-}
+  condition: PropTypes.oneOf(['Thunderstorm', 'Drizzle', 'Rain', 'Snow', 'Atmosphere', 'Clear', 'Clouds']).isRequired,
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'orange',
   },
   temp: {
     fontSize: 24,
+    color: 'white',
   },
   halfContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
