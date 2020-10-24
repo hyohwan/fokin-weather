@@ -7,30 +7,42 @@ import { LinearGradient } from 'expo-linear-gradient';
 const weatherOptions = {
   // Haze
   Clear: {
+    gradient: ['#0ED2F7', '#B2FEFA'],
     iconName: 'weather-sunny',
-    gradient: ['#B2FEFA', '#0ED2F7'],
+    iconColor: 'white',
+    title: `It's a sunny day!!`,
+    subtitle: 'go picnic',
+    textColor: '#fffbd5',
   },
   Clouds: {
-    iconName: 'weather-cloudy',
     gradient: ['#757F9A', '#D7DDE8'],
+    iconName: 'weather-cloudy',
+    title: 'Cloudy...',
+    subtitle: 'calm',
+    textColor: 'white',
   },
   unknown: {
-    iconName: 'help-circle-outline',
     gradient: ['#DE6262', '#FFB88C'],
+    iconName: 'help-circle-outline',
+    title: `I don't know`,
+    subtitle: 'let me know weather today..',
+    textColor: 'white',
   },
 };
 
 export default function Weather({ temp, condition }) {
   console.log(temp, condition);
+  let weather = weatherOptions[condition] || weatherOptions['unknown'];
   return (
-    <LinearGradient colors={(weatherOptions[condition] || weatherOptions['unknown']).gradient} style={styles.container}>
+    <LinearGradient colors={weather.gradient} style={styles.container}>
       <StatusBar barStyle={'light-content'} />
       <View style={styles.halfContainer}>
-        <MaterialCommunityIcons name={(weatherOptions[condition] || weatherOptions['unknown']).iconName} size={96} color='white' />
-        <Text style={styles.temp}>{temp}º</Text>
+        <MaterialCommunityIcons name={weather.iconName} size={96} color={weather.iconColor} />
+        <Text style={{ ...styles.temp, ...{ color: weather.iconColor } }}>{temp}º</Text>
       </View>
-      <View style={styles.halfContainer}>
-        <Text>123</Text>
+      <View style={{ ...styles.halfContainer, ...styles.textContainer }}>
+        <Text style={{ ...styles.title, ...{ color: weather.textColor } }}>Title</Text>
+        <Text style={{ ...styles.subtitle, ...{ color: weather.textColor } }}>subtitle</Text>
       </View>
     </LinearGradient>
   );
@@ -56,5 +68,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textContainer: {
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 42,
+    fontWeight: '300',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 24,
+    fontWeight: '600',
   },
 });
